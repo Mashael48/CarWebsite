@@ -4,8 +4,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import java.net.URI;
@@ -102,10 +101,7 @@ public class CarControllerTest {
      */
     @Test
     public void findCar() throws Exception {
-    	
         Car car = getCar();
-        car.setId(1L);
-
         mvc.perform(get(new URI("/cars/".concat(String.valueOf(car.getId()))))
                         .accept(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk())
@@ -120,19 +116,20 @@ public class CarControllerTest {
      */
     @Test
     public void deleteCar() throws Exception {
-        /**
-         * TODO: Add a test to check whether a vehicle is appropriately deleted
-         *   when the `delete` method is called from the Car Controller. This
-         *   should utilize the car from `getCar()` below.
-         */
+        Car car = getCar();
+        mvc.perform(delete(new URI("/cars/".concat(String.valueOf(car.getId())))))
+                .andExpect(status().isNoContent());
     }
 
     /**
      * Creates an example Car object for use in testing.
      * @return an example Car object
      */
-    private Car getCar() {
+    private static Car getCar() {
+    	
         Car car = new Car();
+        car.setId(1L);
+        
         car.setLocation(new Location(40.730610, -73.935242));
         Details details = new Details();
         Manufacturer manufacturer = new Manufacturer(101, "Chevrolet");
